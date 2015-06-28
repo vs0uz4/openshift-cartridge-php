@@ -42,6 +42,18 @@ function _configuration_setup() {
             CONF_FILE=${OPENSHIFT_PHP_DIR}/conf/${CONF_TARGET_FILE}.erb
         fi
 
+        if [ "$OPENSHIFT_GEAR_DNS" != "$OPENSHIFT_APP_DNS" ]; then
+            if [ ! -f "${CONF_FILE}" ]; then
+                client_result "No ${CONF_FILE}"
+            else
+                client_result "Exists ${CONF_FILE}"
+            fi
+
+            env >> ${OPENSHIFT_PHP_DIR}/env.log
+            (ls -la ${OPENSHIFT_DEPLOYMENTS_DIR}/current/repo || echo "NO ${OPENSHIFT_DEPLOYMENTS_DIR}/current/repo")  >> ${OPENSHIFT_PHP_DIR}/env.log
+        fi
+
+        client_result "Installing ${CONF_FILE}"
         oo-erb ${CONF_FILE} > ${OPENSHIFT_PHP_DIR}/conf/${CONF_TARGET_FILE}
     done
 }
@@ -58,7 +70,7 @@ function start() {
 
         _is_running && client_result "PHP-FPM instance is started"
     else
-        echo "PHP-FPM already running" 1>&2
+        client_result "PHP-FPM already running" 1>&2
     fi
 }
 
