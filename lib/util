@@ -30,5 +30,5 @@ function config() {
         fi
     done
 
-    return res
+    return ${res}
 }
