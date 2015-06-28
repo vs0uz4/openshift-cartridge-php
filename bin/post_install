@@ -1,0 +1,21 @@
+#!/bin/bash
+set -e
+
+source ${OPENSHIFT_CARTRIDGE_SDK_BASH}
+source ${OPENSHIFT_PHP_DIR}/lib/util
+
+# Do nothing when not scaling up
+if [ "$OPENSHIFT_GEAR_DNS" == "$OPENSHIFT_APP_DNS" ]; then
+    exit 0;
+fi
+
+# Check configuration when scaling up
+if ! config; then
+    client_result "Configuration change detected applying changes"
+
+    ${OPENSHIFT_PHP_DIR}/bin/control stop
+    ${OPENSHIFT_PHP_DIR}/bin/control build
+    ${OPENSHIFT_PHP_DIR}/bin/control start
+fi
+
+exit 0;

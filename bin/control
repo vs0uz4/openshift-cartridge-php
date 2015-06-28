@@ -2,15 +2,12 @@
 set -e
 
 source ${OPENSHIFT_CARTRIDGE_SDK_BASH}
+source ${OPENSHIFT_PHP_DIR}/lib/util
 
 export STOPTIMEOUT=20
 
 PHP_FPM_EXEC=${OPENSHIFT_PHP_VERSION_DIR}/sbin/php-fpm
 PHP_FPM_PID=${OPENSHIFT_PHP_DIR}/pid/php-fpm-${OPENSHIFT_GEAR_UUID}.pid
-
-# A map of files that can be configured in the repo.
-declare -A CONF_FILES
-CONF_FILES=( ['cli/php.ini.erb']='php.ini' ['fpm/php.ini.erb']='php-fpm.ini' ['fpm/php-fpm.conf.erb']='php-fpm.conf' )
 
 function _is_running() {
     if [ -f "${PHP_FPM_PID}" ]; then
@@ -26,41 +23,9 @@ function _is_running() {
     return 1
 }
 
-function _configuration_setup() {
-    # Install config files
-    for file in "${!CONF_FILES[@]}"; do
-        local CONF_TARGET_FILE=${CONF_FILES["${file}"]}
-        local CONF_FILE=${OPENSHIFT_REPO_DIR}/.openshift/${file}
-
-        # If the plugin is scaling we need to use OPENSHIFT_DEPLOYMENTS_DIR
-        if [ ! -f "${CONF_FILE}" ]; then
-            CONF_FILE=${OPENSHIFT_DEPLOYMENTS_DIR}/current/repo/.openshift/${file}
-        fi
-
-        # If no custom config is used use the default
-        if [ ! -f "${CONF_FILE}" ]; then
-            CONF_FILE=${OPENSHIFT_PHP_DIR}/conf/${CONF_TARGET_FILE}.erb
-        fi
-
-        if [ "$OPENSHIFT_GEAR_DNS" != "$OPENSHIFT_APP_DNS" ]; then
-            if [ ! -f "${CONF_FILE}" ]; then
-                client_result "No ${CONF_FILE}"
-            else
-                client_result "Exists ${CONF_FILE}"
-            fi
-
-            env >> ${OPENSHIFT_PHP_DIR}/env.log
-            (ls -la ${OPENSHIFT_DEPLOYMENTS_DIR}/current/repo || echo "NO ${OPENSHIFT_DEPLOYMENTS_DIR}/current/repo")  >> ${OPENSHIFT_PHP_DIR}/env.log
-        fi
-
-        client_result "Installing ${CONF_FILE}"
-        oo-erb ${CONF_FILE} > ${OPENSHIFT_PHP_DIR}/conf/${CONF_TARGET_FILE}
-    done
-}
-
 function start() {
     if ! _is_running; then
-        _configuration_setup
+        config
 
         # Start php fpm
         ${PHP_FPM_EXEC} \
@@ -124,7 +89,7 @@ function build() {
     fi
 
     # Update configuration
-    _configuration_setup
+    config
 
     # Install pecl
     PECL_FILE=${OPENSHIFT_REPO_DIR}/.openshift/php-pecl.txt
