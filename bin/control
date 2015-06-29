@@ -119,5 +119,15 @@ case "$1" in
   status)    status ;;
   reload)    reload ;;
   build)     build ;;
-  *)         exit 0
+  
+  tidy)          touch ${PHP_VERSION_DIR}/control_tidy ;;
+  pre-build)     touch ${PHP_VERSION_DIR}/control_pre_build ;;
+  build)         touch ${PHP_VERSION_DIR}/control_build ;;
+  deploy)        touch ${PHP_VERSION_DIR}/control_deploy ;;
+  post-deploy)   touch ${PHP_VERSION_DIR}/control_post_deploy ;;
+  pre-snapshot)  touch ${PHP_VERSION_DIR}/control_pre_snapshot ;;
+  post-snapshot) touch ${PHP_VERSION_DIR}/control_post_snapshot ;;
+  pre-restore)   touch ${PHP_VERSION_DIR}/control_pre_restore ;;
+  post-restore)  touch ${PHP_VERSION_DIR}/control_post_restore ;;
+  *)             exit 0
 esac
