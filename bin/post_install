@@ -14,7 +14,8 @@ fi
 client_result "SCALE"
 
 # Check configuration when scaling up
-if ! config; then
+config
+if [ CONFIGURATION_DIRTY -eq 1 ]; then
     client_result "Configuration change detected applying changes"
 
     ${OPENSHIFT_PHP_DIR}/bin/control stop

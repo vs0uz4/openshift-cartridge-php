@@ -1,9 +1,11 @@
 #!/bin/bash
 
+CONFIGURATION_DIRTY=0
+
 # Check that the configuration files are valid and have not change.
 # Returns 0 if no changes have been detected else 1
 function config() {
-    local res=0
+    CONFIGURATION_DIRTY=0
     echo "Config"
 
     # A map of files that can be configured in the repo.
@@ -30,10 +32,9 @@ function config() {
 
         if [ ! -f "${TARGET_FILE}" ] || [ "`oo-erb ${CONF_FILE} | md5sum | awk '{print $1}'`" != "`md5sum ${TARGET_FILE} | awk '{print $1}'`" ]; then
             oo-erb ${CONF_FILE} > ${TARGET_FILE}
-            res=1
+            CONFIGURATION_DIRTY=1
         fi
     done
 
-    echo "${res}"
-    return ${res}
+    return 0
 }
