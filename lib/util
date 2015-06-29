@@ -6,7 +6,7 @@ CONFIGURATION_DIRTY=0
 # Returns 0 if no changes have been detected else 1
 function config() {
     CONFIGURATION_DIRTY=0
-    echo "Config"
+    echo "Checking configuration"
 
     # A map of files that can be configured in the repo.
     declare -A CONF_FILES
@@ -28,9 +28,10 @@ function config() {
             CONF_FILE=${OPENSHIFT_PHP_DIR}/conf/${CONF_TARGET_FILE}.erb
         fi
 
-        echo "${CONF_FILE} > ${TARGET_FILE}"
+        client_result "${CONF_FILE}"
 
         if [ ! -f "${TARGET_FILE}" ] || [ "`oo-erb ${CONF_FILE} | md5sum | awk '{print $1}'`" != "`md5sum ${TARGET_FILE} | awk '{print $1}'`" ]; then
+            echo "- ${CONF_FILE} > ${CONF_TARGET_FILE}"
             oo-erb ${CONF_FILE} > ${TARGET_FILE}
             CONFIGURATION_DIRTY=1
         fi

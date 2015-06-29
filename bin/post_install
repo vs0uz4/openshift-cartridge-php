@@ -4,19 +4,15 @@ set -e
 source ${OPENSHIFT_CARTRIDGE_SDK_BASH}
 source ${OPENSHIFT_PHP_DIR}/lib/util
 
-client_result "POST INSTALL PHP"
-
 # Do nothing when not scaling up
 if [ "${OPENSHIFT_GEAR_DNS}" == "${OPENSHIFT_APP_DNS}" ]; then
     exit 0;
 fi
 
-client_result "SCALE"
-
 # Check configuration when scaling up
 config
-if [ CONFIGURATION_DIRTY -eq 1 ]; then
-    client_result "Configuration change detected applying changes"
+if [ ${CONFIGURATION_DIRTY} -eq 1 ]; then
+    client_result "Applying configuration changes"
 
     ${OPENSHIFT_PHP_DIR}/bin/control stop
     ${OPENSHIFT_PHP_DIR}/bin/control build
