@@ -4,6 +4,7 @@
 # Returns 0 if no changes have been detected else 1
 function config() {
     local res=0
+    echo "Config"
 
     # A map of files that can be configured in the repo.
     declare -A CONF_FILES
@@ -25,11 +26,14 @@ function config() {
             CONF_FILE=${OPENSHIFT_PHP_DIR}/conf/${CONF_TARGET_FILE}.erb
         fi
 
+        echo "${CONF_FILE} > ${TARGET_FILE}"
+
         if [ ! -f "${TARGET_FILE}" ] || [ "`oo-erb ${CONF_FILE} | md5sum | awk '{print $1}'`" != "`md5sum ${TARGET_FILE} | awk '{print $1}'`" ]; then
             oo-erb ${CONF_FILE} > ${TARGET_FILE}
             res=1
         fi
     done
 
+    echo "${res}"
     return ${res}
 }

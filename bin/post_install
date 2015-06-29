@@ -7,7 +7,7 @@ source ${OPENSHIFT_PHP_DIR}/lib/util
 client_result "POST INSTALL PHP"
 
 # Do nothing when not scaling up
-if [ "$OPENSHIFT_GEAR_DNS" == "$OPENSHIFT_APP_DNS" ]; then
+if [ "${OPENSHIFT_GEAR_DNS}" == "${OPENSHIFT_APP_DNS}" ]; then
     exit 0;
 fi
 
