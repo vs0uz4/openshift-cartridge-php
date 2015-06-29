@@ -122,7 +122,6 @@ case "$1" in
   
   tidy)          touch ${PHP_VERSION_DIR}/control_tidy ;;
   pre-build)     touch ${PHP_VERSION_DIR}/control_pre_build ;;
-  build)         touch ${PHP_VERSION_DIR}/control_build ;;
   deploy)        touch ${PHP_VERSION_DIR}/control_deploy ;;
   post-deploy)   touch ${PHP_VERSION_DIR}/control_post_deploy ;;
   pre-snapshot)  touch ${PHP_VERSION_DIR}/control_pre_snapshot ;;
