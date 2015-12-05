@@ -8,11 +8,11 @@ source common
 BUILD_DIR="${CURRENT_DIR}/tmp/"
 
 # Versions
-ICU_VERSION='54.1'
+ICU_VERSION='56.1'
 LIBMCRYPT_VERSION='2.5.8'
 LIBTOOL_VERSION='2.4.6'
-RE2C_VERSION='0.14.1'
-BISON_VERSION='2.7.1'
+RE2C_VERSION='0.15.3'
+BISON_VERSION='3.0.4'
 
 # Define functions
 function install_re2c() {
@@ -24,7 +24,7 @@ function install_re2c() {
     pushd ${BUILD_DIR}
 
     # Get archive
-    download_and_unpack ${pkg} "http://sourceforge.net/projects/re2c/files/re2c/${RE2C_VERSION}/${pkg}/download?r=http%3A%2F%2Fsourceforge.net%2Fprojects%2Fre2c%2F&ts=${ts}&use_mirror=freefr"
+    download_and_unpack ${pkg} "http://sourceforge.net/projects/re2c/files/${RE2C_VERSION}/${pkg}/download?r=http%3A%2F%2Fsourceforge.net%2Fprojects%2Fre2c%2F&ts=${ts}&use_mirror=autoselect"
     pushd re2c-${RE2C_VERSION}
 
     echo "Configuring Re2c."
@@ -90,7 +90,7 @@ function install_libmcrypt() {
     pushd ${BUILD_DIR}
 
     # Get archive
-    download_and_unpack ${pkg} "http://sourceforge.net/projects/mcrypt/files/Libmcrypt/${LIBMCRYPT_VERSION}/${pkg}/download?r=http%3A%2F%2Fsourceforge.net%2Fprojects%2Fmcrypt%2F&ts=${ts}&use_mirror=freefr"
+    download_and_unpack ${pkg} "http://sourceforge.net/projects/mcrypt/files/Libmcrypt/${LIBMCRYPT_VERSION}/${pkg}/download?r=http%3A%2F%2Fsourceforge.net%2Fprojects%2Fmcrypt%2F&ts=${ts}&use_mirror=autoselect"
     pushd libmcrypt-${LIBMCRYPT_VERSION}
 
     echo "Configuring LibMCrypt."
