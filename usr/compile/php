@@ -43,12 +43,13 @@ function install_php() {
         --with-gd \
         --with-jpeg-dir \
         --with-png-dir \
-        --with-png-dir \
+        --with-zlib-dir \
         --with-xpm-dir \
         --with-freetype-dir \
         --without-pear \
         --disable-debug \
         --enable-gd-native-ttf \
+        --enable-gd-jis-conv \
         --enable-fpm \
         --enable-cli \
         --enable-inline-optimization \
